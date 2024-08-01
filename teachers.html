@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Teacher Management</title>
+        <link rel="stylesheet" type="text/css" href="styles.css">
+        <style>
+           
+        /* Your existing CSS styles here */
+        body {
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+        background-color: #333;
+        color: #fff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+    }
+
+    header button {
+        font-size: 32px; /* Increase arrow size */
+        background: none;
+        border: none;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    header h1 {
+        margin: 0;
+    }
+
+
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        section {
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin-top: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #333;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        /* Additional styles for buttons */
+        button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        form {
+            background-color: #f8f8f8;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        form label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+
+        form input[type="text"] {
+            width: 95%;
+            padding: 10px;
+            margin: 0 0 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        form input[type="submit"] {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #555;
+        }
+
+        /* Search input and button styles */
+        #search {
+            width: 60%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            margin-right: 10px;
+            font-size: 16px;
+        }
+
+        #search-button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #search-button:hover {
+            background-color: #555;
+        }
+
+        /* Adjust the teacher list table styles */
+        #teacher-list table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #333;
+        }
+
+        #teacher-list th,
+        #teacher-list td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        #teacher-list th {
+            background-color: #333;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Highlighted row on hover */
+        #teacher-list tbody tr:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Button styles */
+        button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        /* Style for the "Add New Teacher" block */
+        #registration {
+            background-color: #f8f8f8;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        /* Style for the "Search" block */
+        #search {
+            width: 60%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        #search-button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: -1px;
+        }
+
+        /* Style for the "Teachers List" block */
+        #teacher-list {
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+        }
+
+        #teacher-list table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #333;
+        }
+
+        #teacher-list th,
+        #teacher-list td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        #teacher-list th {
+            background-color: #333;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Highlighted row on hover */
+        #teacher-list tbody tr:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Button styles */
+        button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+    </style>
+<body>
+    <header>
+        <button id="back">&#8592;</button>
+        <h1>Teacher Management</h1>
+    </header>
+    <main>
+        <section id="registration">
+            <h2>Add New Teacher</h2>
+            <form id="registration-form">
+                <label for="teacher-name">Name:</label>
+                <input type="text" id="teacher-name" name="teacher-name" required>
+
+                <label for="teacher-subject">Subject:</label>
+                <input type="text" id="teacher-subject" name="teacher-subject" required>
+
+                <input type="submit" value="Add Teacher">
+            </form>
+        </section>
+
+        <section>
+            <input type="text" id="search" placeholder="Search by Name or Subject">
+            <br><br>
+            <button id="search-button">Search</button>
+        </section>
+
+        <section id="teacher-list">
+            <h2>Teacher List</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Subject</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Populate this tbody with teacher data -->
+                </tbody>
+            </table>
+        </section>
+        
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const registrationForm = document.getElementById('registration-form');
+            const teacherList = document.querySelector('#teacher-list tbody');
+            const teachers = JSON.parse(localStorage.getItem('teachers')) || [];
+
+            function displayTeachers() {
+                for (const teacher of teachers) {
+                    const newRow = document.createElement('tr');
+                    newRow.innerHTML = `<td>${teacher.name}</td><td>${teacher.subject}</td><td>
+                        <button class="edit-button" data-teacher-name="${teacher.name}">Edit</button>
+                        <button class="delete-button" data-teacher-name="${teacher.name}">Delete</button>
+                    </td>`;
+                    teacherList.appendChild(newRow);
+                }
+            }
+
+            displayTeachers();
+
+            registrationForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                const name = document.getElementById('teacher-name').value;
+                const subject = document.getElementById('teacher-subject').value;
+
+                const teacher = {
+                    name: name,
+                    subject: subject,
+                };
+
+                teachers.push(teacher);
+                localStorage.setItem('teachers', JSON.stringify(teachers));
+
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `<td>${name}</td><td>${subject}</td><td>
+                    <button class="edit-button" data-teacher-name="${name}">Edit</button>
+                    <button class="delete-button" data-teacher-name="${name}">Delete</button>
+                </td>`;
+                teacherList.appendChild(newRow);
+
+                registrationForm.reset();
+            });
+
+            teacherList.addEventListener('click', function (event) {
+                if (event.target.classList.contains('edit-button')) {
+                    const teacherName = event.target.getAttribute('data-teacher-name');
+                    const teacher = teachers.find(teacher => teacher.name === teacherName);
+                    if (teacher) {
+                        const newName = prompt('Enter new name:', teacher.name);
+                        const newSubject = prompt('Enter new subject:', teacher.subject);
+                        if (newName) {
+                            teacher.name = newName;
+                            teacher.subject = newSubject;
+                            localStorage.setItem('teachers', JSON.stringify(teachers));
+                            const row = event.target.parentNode.parentNode;
+                            row.children[0].textContent = newName;
+                            row.children[1].textContent = newSubject;
+                        }
+                    }
+                } else if (event.target.classList.contains('delete-button')) {
+                    const teacherName = event.target.getAttribute('data-teacher-name');
+                    const teacherIndex = teachers.findIndex(teacher => teacher.name === teacherName);
+                    if (teacherIndex !== -1) {
+                        teachers.splice(teacherIndex, 1);
+                        localStorage.setItem('teachers', JSON.stringify(teachers));
+                        event.target.parentNode.parentNode.remove();
+                    }
+                }
+            });
+
+            const backButton = document.getElementById('back');
+
+            backButton.addEventListener('click', function () {
+                window.location.href = 'index.html';
+            });
+
+
+
+            const searchInput = document.getElementById('search');
+    const searchButton = document.getElementById('search-button');
+
+    // Function to filter and display teachers based on search input
+    function searchTeachers() {
+        const searchText = searchInput.value.toLowerCase();
+        const filteredTeachers = teachers.filter((teacher) =>
+            teacher.name.toLowerCase().includes(searchText) ||
+            teacher.subject.toLowerCase().includes(searchText)
+        );
+
+        // Clear the existing teacher list
+        teacherList.innerHTML = '';
+
+        // Display the filtered teachers
+        for (const teacher of filteredTeachers) {
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `<td>${teacher.name}</td><td>${teacher.subject}</td><td>
+                <button class="edit-button" data-teacher-name="${teacher.name}">Edit</button>
+                <button class="delete-button" data-teacher-name="${teacher.name}">Delete</button>
+            </td>`;
+            teacherList.appendChild(newRow);
+        }
+    }
+
+    // Event listener for the search button
+    searchButton.addEventListener('click', function () {
+        searchTeachers();
+    });
+
+    // Event listener for real-time search as you type
+    searchInput.addEventListener('input', function () {
+        searchTeachers();
+    });
+
+
+        });
+
+
+        
+
+        
+    </script>
+</body>
+</html>

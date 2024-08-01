@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Enrollment System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+        /* Enrollment Form Styles */
+        .enrollment-form {
+            background-color: #fff;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            padding: 20px;
+            text-align: left;
+            margin: 20px;
+            display: inline-block;
+            width: 300px;
+        }
+        .enrollment-form h2 {
+            margin-top: 0;
+            text-align: center;
+            font-size: 24px;
+        }
+        .enrollment-form form {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .enrollment-form label, .enrollment-form input {
+            margin: 5px 0;
+        }
+        .enrollment-form label {
+            display: block;
+            font-weight: bold;
+        }
+        .enrollment-form input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 16px;
+        }
+        .enrollment-form button[type="submit"] {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .enrollment-form button[type="submit"]:hover {
+            background-color: #555;
+        }
+
+        /* Enrollment List Styles */
+        .enrollment-list {
+            background-color: #fff;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            padding: 20px;
+            text-align: left;
+            width: 95%;
+            display: inline-block;
+        }
+        .enrollment-list table {
+            width: 95%;
+            border-collapse: collapse;
+        }
+        .enrollment-list table, .enrollment-list th, .enrollment-list td {
+            border: 1px solid #333;
+        }
+        .enrollment-list th, .enrollment-list td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        /* Search Styles */
+        #search-name {
+            padding: 5px;
+            margin-right: 5px;
+        }
+        #search-button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        #search-button:hover {
+            background-color: #555;
+        }
+
+        /* Edit and Delete Buttons Styles */
+        .edit-button, .delete-button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .edit-button:hover, .delete-button:hover {
+            background-color: #555;
+        }
+        .arrow-head{
+            display: flex;
+            justify-content: space-between;
+            
+        }
+        .my-icon::before {
+    content: "\f061"; /* Unicode for the Font Awesome right-arrow icon */
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    color:white;
+}i.fas.fa-arrow-left {
+    color: rgb(247, 247, 247); /* Change 'blue' to the color you want */
+    font-size: 24px;
+}
+
+
+        
+    </style>
+</head>
+<body>
+    <header><div class="arrow-head">
+        <a href="/index.html"><i class="fas fa-arrow-left"></i> <!-- This adds a right-arrow icon -->
+        </a><h1>Enrollments</h1>
+    </div></header>
+    
+    <div class="enrollment-form">
+        <h2>Enroll in Courses</h2>
+        <form id="enrollment-form">
+            <label for="student-name">Student Name:</label>
+            <input type="text" id="student-name" required>
+            <label for="student-age">Age:</label>
+            <input type="number" id="student-age" required>
+            <label for="course-name">Course Name:</label>
+            <input type="text" id="course-name" required>
+            <button type="submit">Enroll</button>
+        </form>
+    </div>
+    <div class="search">
+        <input type="text" id="search-name" placeholder="Search by Name">
+        <button id="search-button">Search</button>
+    </div>
+    <div class="enrollment-list">
+        <h2>Enrollment List</h2>
+        <table id="enrollment-table">
+            <tr>
+                <th>Student Name</th>
+                <th>Age</th>
+                <th>Course Name</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </table>
+    </div>
+<script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const enrollmentForm = document.getElementById('enrollment-form');
+            const enrollmentTable = document.getElementById('enrollment-table');
+            const searchInput = document.getElementById('search-name');
+            const searchButton = document.getElementById('search-button');
+            const storedEnrollments = JSON.parse(localStorage.getItem('enrollments')) || [];
+
+            function isDuplicateEnrollment(studentName, courseName) {
+                return storedEnrollments.some((enrollment) => {
+                    return (
+                        enrollment.name.trim().toLowerCase() === studentName.trim().toLowerCase() &&
+                        enrollment.course === courseName
+                    );
+                });
+            }
+
+            function displayEnrollments(filterName = null) {
+                enrollmentTable.innerHTML = '<tr><th>Student Name</th><th>Age</th><th>Course Name</th><th>Edit</th><th>Delete</th></tr>';
+                for (let i = 0; i < storedEnrollments.length; i++) {
+                    const enrollment = storedEnrollments[i];
+                    if (filterName === null || enrollment.name.includes(filterName)) {
+                        const newRow = enrollmentTable.insertRow(-1); // Insert at the end
+                        const cell1 = newRow.insertCell(0);
+                        const cell2 = newRow.insertCell(1);
+                        const cell3 = newRow.insertCell(2);
+                        const cell4 = newRow.insertCell(3);
+                        const cell5 = newRow.insertCell(4);
+                        cell1.innerHTML = enrollment.name;
+                        cell2.innerHTML = enrollment.age;
+                        cell3.innerHTML = enrollment.course;
+
+                        const editButton = document.createElement('button');
+                        editButton.textContent = 'Edit';
+                        editButton.className = 'edit-button';
+                        editButton.addEventListener('click', () => editEnrollment(i));
+                        cell4.appendChild(editButton);
+
+                        const deleteButton = document.createElement('button');
+                        deleteButton.textContent = 'Delete';
+                        deleteButton.className = 'delete-button';
+                        deleteButton.addEventListener('click', () => deleteEnrollment(i));
+                        cell5.appendChild(deleteButton);
+                    }
+                }
+            }
+
+            displayEnrollments();
+
+            enrollmentForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+                const studentName = document.getElementById('student-name').value.trim();
+                const studentAge = document.getElementById('student-age').value;
+                const courseName = document.getElementById('course-name').value.trim();
+
+                if (studentName && studentAge && courseName) {
+                    // Check if there is a duplicate enrollment based on student name and course name
+                    if (!isDuplicateEnrollment(studentName, courseName)) {
+                        const enrollment = {
+                            name: studentName,
+                            age: studentAge,
+                            course: courseName,
+                        };
+
+                        storedEnrollments.push(enrollment);
+                        localStorage.setItem('enrollments', JSON.stringify(storedEnrollments));
+
+                        document.getElementById('student-name').value = '';
+                        document.getElementById('student-age').value = '';
+                        document.getElementById('course-name').value = '';
+
+                        displayEnrollments();
+                    } else {
+                        alert('Student is already enrolled in the same course.');
+                    }
+                }
+            });
+
+            // Function to edit enrollment
+            function editEnrollment(index) {
+                const newStudentName = prompt('Enter new student name:', storedEnrollments[index].name);
+                if (newStudentName !== null) {
+                    const newStudentAge = prompt('Enter new age:', storedEnrollments[index].age);
+                    const newCourseName = prompt('Enter new course name:', storedEnrollments[index].course);
+
+                    if (newStudentName && newStudentAge && newCourseName) {
+                        storedEnrollments[index] = {
+                            name: newStudentName,
+                            age: newStudentAge,
+                            course: newCourseName,
+                        };
+                        localStorage.setItem('enrollments', JSON.stringify(storedEnrollments));
+
+                        displayEnrollments();
+                    }
+                }
+            }
+
+            // Function to delete enrollment
+            function deleteEnrollment(index) {
+                if (confirm('Are you sure you want to delete this enrollment?')) {
+                    storedEnrollments.splice(index, 1);
+                    localStorage.setItem('enrollments', JSON.stringify(storedEnrollments));
+                    displayEnrollments();
+                }
+            }
+
+            // Handle search button
+            searchButton.addEventListener('click', function () {
+                const searchName = searchInput.value;
+                displayEnrollments(searchName);
+            });
+        });
+    </script>
+
+
+</body>
+</html>

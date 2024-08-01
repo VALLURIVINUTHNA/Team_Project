@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Student Management System</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 1rem;
+}
+
+header h1 {
+    margin: 0;
+}
+
+main {
+    max-width: 800px;
+    margin: 2rem auto;
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+section {
+    margin-top: 1rem;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+input[type="submit"] {
+    background-color: #333;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border: none;
+    cursor: pointer;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th,
+table td {
+    border: 1px solid #ccc;
+    padding: 0.5rem;
+    text-align: left;
+}
+
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Student Management System</h1>
+    </header>
+    <main>
+        <section id="registration">
+            <h2>Student Registration</h2>
+            <form id="registration-form">
+                <label for="student-name">Name:</label>
+                <input type="text" id="student-name" required>
+
+                <label for="student-age">Age:</label>
+                <input type="number" id="student-age" required>
+
+                <label for="student-courses">Courses:</label>
+                <select id="student-courses" multiple required>
+                    <option value="HTML">HTML</option>
+                    <option value="CSS">CSS</option>
+                    <option value="JavaScript">JavaScript</option>
+                </select>
+
+                <input type="submit" value="Register">
+            </form>
+        </section>
+
+        <section id="student-list">
+            <h2>Enrolled Students</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Courses</th>
+                    </tr>
+                </thead>
+                <tbody id="student-list-body">
+                    <!-- Populate this tbody with student data -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <script>const registrationForm = document.getElementById('registration-form');
+        const studentList = document.getElementById('student-list-body');
+        const studentName = document.getElementById('student-name');
+        const studentAge = document.getElementById('student-age');
+        const studentCourses = document.getElementById('student-courses');
+        
+        let students = [];
+        
+        // Load student data from localStorage when the page loads
+        function loadStudentData() {
+            const storedStudents = localStorage.getItem('students');
+            if (storedStudents) {
+                students = JSON.parse(storedStudents);
+            }
+            displayStudents();
+        }
+        
+        // Save student data to localStorage
+        function saveStudentData() {
+            localStorage.setItem('students', JSON.stringify(students));
+        }
+        
+        // Display students in the table
+        function displayStudents() {
+            studentList.innerHTML = '';
+            students.forEach((student) => {
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td>${student.name}</td>
+                    <td>${student.age}</td>
+                    <td>${student.courses.join(', ')}</td>
+                `;
+                studentList.appendChild(newRow);
+            });
+        }
+        
+        // Event listener for registration form
+        registrationForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+        
+            const name = studentName.value;
+            const age = studentAge.value;
+            const courses = [...studentCourses.selectedOptions].map(option => option.value);
+        
+            const newStudent = {
+                name,
+                age,
+                courses,
+            };
+        
+            students.push(newStudent);
+            saveStudentData();
+            displayStudents();
+        
+            // Reset the form
+            studentName.value = '';
+            studentAge.value = '';
+            studentCourses.selectedIndex = -1;
+        });
+        
+        // Load student data when the page loads
+        loadStudentData();
+        </script>
+</body>
+
+</html>

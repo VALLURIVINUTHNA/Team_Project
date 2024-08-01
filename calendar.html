@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* h1 {
+            margin-bottom: 20px;
+        } */
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        h2 {
+            margin: 20px 0;
+        }
+
+        #calendar {
+            display: inline-block;
+            vertical-align: top;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input, button {
+            margin: 5px;
+        }
+
+        #calendar-container {
+            max-height: 300px;
+            overflow: auto;
+        }
+        .arrow-head{
+            display: flex;
+            justify-content: space-between;
+            
+        }
+        .my-icon::before {
+    content: "\f061"; /* Unicode for the Font Awesome right-arrow icon */
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    color:white;
+}i.fas.fa-arrow-left {
+    color: rgb(247, 247, 247); /* Change 'blue' to the color you want */
+    font-size: 24px;
+}
+
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="arrow-head">
+            <a href="/index.html"><i class="fas fa-arrow-left"></i> <!-- This adds a right-arrow icon -->
+            </a><h1>Calendar</h1>
+        </div>
+    </header>
+
+    <div id="calendar">
+        <h2>Calendar</h2>
+        <input type="date" id="filter-date">
+        <button onclick="filterEventsByDate()">Filter by Date</button>
+        <p id="event-count">Total Events: 0</p>
+        <div id="calendar-container">
+            <!-- Calendar events will be displayed here -->
+        </div>
+        <input type="text" id="event-title" placeholder="Event Title">
+        <input type="date" id="event-date">
+        <button onclick="addEvent()">Add Event</button>
+    </div>
+
+    <script>
+        const eventTitle = document.getElementById('event-title');
+        const eventDate = document.getElementById('event-date');
+        const calendarContainer = document.getElementById('calendar-container');
+        const filterDate = document.getElementById('filter-date');
+        const eventCount = document.getElementById('event-count');
+
+        let events = [];
+
+        // Load data from local storage on page load
+        loadFromLocalStorage();
+
+        // Function to add an event
+        function addEvent() {
+            const title = eventTitle.value.trim();
+            const date = eventDate.value;
+            if (title && date) {
+                events.push({ title, date });
+                eventTitle.value = '';
+                eventDate.value = '';
+                renderCalendar();
+                saveToLocalStorage();
+            }
+        }
+
+        // Function to render the calendar
+        function renderCalendar() {
+            const sortedEvents = events.slice().sort((a, b) => new Date(a.date) - new Date(b.date));
+            calendarContainer.innerHTML = sortedEvents.map((event, index) => `
+                <div>
+                    <strong>${event.title}</strong>
+                    <br>
+                    ${event.date}
+                    <div class="button-group">
+                        <button onclick="editEvent(${index})">Edit</button>
+                        <button onclick="deleteEvent(${index})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+
+            // Update event count
+            eventCount.textContent = `Total Events: ${events.length}`;
+        }
+
+        // Function to filter events by date
+        function filterEventsByDate() {
+            const selectedDate = filterDate.value;
+            const filteredEvents = events.filter(event => event.date === selectedDate);
+            renderCalendar(filteredEvents);
+        }
+
+        // Function to edit an event
+        function editEvent(index) {
+            const newTitle = prompt("Edit event title:", events[index].title);
+            const newDate = prompt("Edit event date:", events[index].date);
+            if (newTitle && newDate) {
+                events[index] = { title: newTitle, date: newDate };
+                renderCalendar();
+                saveToLocalStorage();
+            }
+        }
+
+        // Function to delete an event
+        function deleteEvent(index) {
+            if (confirm("Are you sure you want to delete this event?")) {
+                events.splice(index, 1);
+                renderCalendar();
+                saveToLocalStorage();
+            }
+        }
+
+        // Function to check for reminders
+        function checkReminders() {
+            const currentDate = new Date();
+            const today = currentDate.toISOString().split('T')[0]; // Get the current date in yyyy-mm-dd format
+            const todayEvents = events.filter(event => event.date === today);
+            
+            if (todayEvents.length > 0) {
+                alert('You have events today:\n' + todayEvents.map(event => event.title).join('\n'));
+            }
+        }
+
+        // Function to save data to local storage
+        function saveToLocalStorage() {
+            localStorage.setItem('events', JSON.stringify(events));
+        }
+
+        // Function to load data from local storage
+        function loadFromLocalStorage() {
+            const storedEvents = JSON.parse(localStorage.getItem('events'));
+            if (storedEvents) {
+                events = storedEvents;
+                renderCalendar();
+                checkReminders(); // Check for reminders after loading data
+            }
+        }
+    </script>
+</body>
+</html>

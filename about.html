@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Student Management System</title>
+    <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+nav {
+    background-color: #090909; 
+    color: #fff; 
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 15px 0;
+    z-index: 1;
+}
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+.nav-links {
+    list-style: none;
+    display: flex;
+}
+.nav-links li {
+    margin-right: 25px;
+}
+.nav-links a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+}
+.login-button:hover,
+.signup-button:hover {
+    background-color: #0a0a0a; 
+    color: #fff; }
+.container {
+    padding: 20px;
+    margin-top: 80px;
+}
+.about, .mission, .team {
+    background-color: #fff; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 20px;
+    margin: 20px 0;
+}
+.about h2, .mission h2, .team h2 {
+    font-size: 24px;
+    color: #0e0e0e; }
+.about p, .mission ul, .team p {
+    margin: 10px 0;
+}
+.mission ul {
+    padding: 0;
+    list-style-type: disc;
+    margin-left: 20px;
+}
+.team p {
+    margin-bottom: 20px;
+}
+    </style>
+</head>
+<body>
+    <form action="/about" method="GET">
+    <nav>
+        <div class="navbar">
+            
+                <h2>Student Management System</h2>
+            
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="login.html" class="login-button">Login</a></li>
+                <li><a href="signup.html" class="signup-button">Signup</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <section class="about">
+            <h2>Welcome to the Student Management System</h2>
+            <p>Your all-in-one solution for efficient and effective student administration. Our mission is to simplify the management of student information, making the educational process smoother and more productive for both educational institutions and students.</p>
+        </section>
+        <section class="mission">
+            <h2>Our Mission</h2>
+            <ul>
+                <li>Streamline Administrative Tasks: We aim to reduce the administrative burden on educational institutions, allowing educators to focus on teaching, and students to focus on learning.</li>
+                <li>Enhance Communication: We facilitate seamless communication between students, parents, and educators, fostering a collaborative learning environment.</li>
+                <li>Improve Student Experience: Our platform helps create a positive student experience by providing access to their academic progress and resources.</li>
+                <li>Data Security: We prioritize the security of your student data, ensuring that it is protected from unauthorized access.</li>
+            </ul>
+        </section>
+        <section class="team">
+            <h2>Our Team</h2>
+            <p>We are a passionate team of educators and technologists who share a common vision: to make education accessible and efficient for all. With years of experience in both education and technology, we understand the unique challenges faced by educational institutions.</p>
+            <p>Our developers work tirelessly to provide a user-friendly and robust platform, while our support team is always ready to assist with any questions or issues. We are dedicated to serving your institution's needs and helping you achieve your educational goals.</p>
+        </section>
+    </div></form>
+</body>
+</html>

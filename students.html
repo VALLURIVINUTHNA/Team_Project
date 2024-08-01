@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Student Management</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+    }
+
+    header {
+        background-color: #333;
+        color: #fff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+    }
+
+    header button {
+        font-size: 32px; /* Increase arrow size */
+        background: none;
+        border: none;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    header h1 {
+        margin: 0;
+    }
+
+    main {
+        max-width: 1000px; /* Adjust the table size */
+        margin: 2rem auto;
+        background-color: #fff;
+        padding: 1rem;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Add high-level CSS styles for the success message */
+    .success-msg {
+        color: green;
+        font-weight: bold;
+    }
+
+    section {
+        margin-top: 1rem;
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="email"],
+    select {
+        width: 100%;
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    /* Style the form inputs */
+    input[type="text"],
+    input[type="number"],
+    input[type="email"],
+    select {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    /* Style the success message */
+    .success-msg {
+        color: green;
+        font-weight: bold;
+    }
+
+    /* Style the "Register" button */
+    input[type="submit"] {
+        background-color: #333;
+        color: #fff;
+        border: none;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #555;
+    }
+
+    /* Style the "Search" button */
+    #search-button {
+        transition: background-color 0.3s;
+    }
+
+    #search-button:hover {
+        background-color: #555;
+    }
+
+    /* Add a subtle hover effect for table rows */
+    table tbody tr:hover {
+        background-color: #f0f0f0;
+    }
+
+    /* Style the search results alert */
+    #search-results {
+        margin-top: 1rem;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+
+    #search-results:hover {
+        background-color: #f8f8f8;
+    }
+    
+    /* Style the Back button */
+    #back {
+        background-color: #333;
+        color: #fff;
+        border: none;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    #back:hover {
+        background-color: #555;
+    }
+
+</style>
+</head>
+
+<body>
+    <header>
+        <button id="back">&#8592;</button>
+        <h1>Student Management</h1>
+        
+    </header>
+    <main>
+        <section id="registration">
+            <h2>Register New Student</h2>
+            <form id="registration-form">
+                <label for="student-name">Name:</label>
+                <input type="text" id="student-name" name="student-name" required class="form-control">
+
+                <label for="student-age">Age:</label>
+                <input type="number" id="student-age" name="student-age" required class="form-control">
+
+                <label for="student-grade">Grade:</label>
+                <input type="text" id="student-grade" name="student-grade" required class="form-control">
+
+                <label for="student-email">Email:</label>
+                <input type="email" id="student-email" name="student-email" required class="form-control">
+
+                <label for="student-gender">Gender:</label>
+                <select id="student-gender" name="student-gender" required class="form-control">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+
+                <input type="submit" value="Register" class="btn btn-primary">
+                <div id="registration-msg"></div>
+            </form>
+        </section>
+
+        <section id="student-list">
+            <h2>Student List</h2>
+            <div class="input-group mb-3">
+                <input type="number" id="search-box" placeholder="Search by Registration Number" class="form-control">
+                <div class="input-group-append">
+                    <button id="search-button" class="btn btn-primary">Search</button>
+                </div>
+            </div>
+            <div id="search-results" class="alert alert-info"></div>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Registration Number</th>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Grade</th>
+                        <th>Email</th>
+                        <th>Gender</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody id="student-list-body">
+                    <!-- Populate this tbody with student data -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        
+        // JavaScript for Student Management
+        document.addEventListener('DOMContentLoaded', function () {
+            const registrationForm = document.getElementById('registration-form');
+            const studentList = document.getElementById('student-list-body');
+            const searchBox = document.getElementById('search-box');
+            const searchButton = document.getElementById('search-button');
+            const searchResults = document.getElementById('search-results');
+            let students = [];
+
+            // Function to save student data to localStorage
+            function saveStudentData() {
+                localStorage.setItem('students', JSON.stringify(students));
+            }
+
+            // Function to retrieve student data from localStorage
+            function loadStudentData() {
+                const storedStudents = localStorage.getItem('students');
+                if (storedStudents) {
+                    students = JSON.parse(storedStudents);
+                }
+            }
+
+            // Load student data when the page loads
+            loadStudentData();
+
+            // Function to display students
+            function displayStudents() {
+                studentList.innerHTML = '';
+                students.forEach((student, index) => {
+                    const newRow = document.createElement('tr');
+                    newRow.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${student.name}</td>
+                        <td>${student.age}</td>
+                        <td>${student.grade}</td>
+                        <td>${student.email}</td>
+                        <td>${student.gender}</td>
+                        <td><button class="edit-button" data-index="${index}">Edit</button></td>
+                        <td><button class="delete-button" data-index="${index}">Delete</button></td>
+                    `;
+                    studentList.appendChild(newRow);
+                });
+            }
+            function loadAndDisplayStudentData() {
+    loadStudentData();
+    displayStudents();
+}
+
+// Execute the function to load and display data on page load
+loadAndDisplayStudentData();
+
+            // Rest of your code remains the same...
+            // Function to add a student
+            function addStudent(student) {
+                students.push(student);
+                saveStudentData();
+                displayStudents(students);
+            }
+
+            // Function to update a student
+            function updateStudent(index, student) {
+                students[index] = student;
+                saveStudentData();
+                displayStudents(students);
+            }
+
+            // Function to delete a student
+            function deleteStudent(index) {
+                students.splice(index, 1);
+                saveStudentData();
+                displayStudents(students);
+            }
+
+            // Event listener for the "Edit" and "Delete" buttons
+            studentList.addEventListener('click', function (event) {
+                const target = event.target;
+
+                if (target.classList.contains('edit-button')) {
+                    const index = target.getAttribute('data-index');
+                    const student = students[index];
+
+                    // Populate the form with student data for editing
+                    document.getElementById('student-name').value = student.name;
+                    document.getElementById('student-age').value = student.age;
+                    document.getElementById('student-grade').value = student.grade;
+                    document.getElementById('student-email').value = student.email;
+                    document.getElementById('student-gender').value = student.gender;
+
+                    // Change the form submit button to an "Update" button
+                    const submitButton = document.querySelector('#registration-form input[type="submit"]');
+                    submitButton.value = 'Update';
+
+                    // Attach an event listener to the "Update" button
+                    submitButton.onclick = function (event) {
+                        event.preventDefault();
+
+                        const updatedName = document.getElementById('student-name').value;
+                        const updatedAge = document.getElementById('student-age').value;
+                        const updatedGrade = document.getElementById('student-grade').value;
+                        const updatedEmail = document.getElementById('student-email').value;
+                        const updatedGender = document.getElementById('student-gender').value;
+
+                        // Create an updated student object
+                        const updatedStudent = {
+                            name: updatedName,
+                            age: updatedAge,
+                            grade: updatedGrade,
+                            email: updatedEmail,
+                            gender: updatedGender,
+                        };
+
+                        // Update the student at the original index
+                        updateStudent(index, updatedStudent);
+
+                        // Reset the form
+                        registrationForm.reset();
+
+                        // Change the button text back to "Register"
+                        submitButton.value = 'Register';
+                    };
+                } else if (target.classList.contains('delete-button')) {
+                    const index = target.getAttribute('data-index');
+
+                    // Delete the student at the specified index
+                    deleteStudent(index);
+                }
+            });
+
+            // Rest of your code remains the same...
+
+            // Event listener for the registration form
+            registrationForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                const name = document.getElementById('student-name').value;
+                const age = document.getElementById('student-age').value;
+                const grade = document.getElementById('student-grade').value;
+                const email = document.getElementById('student-email').value;
+                const gender = document.getElementById('student-gender').value;
+
+                // Check if a student with the same name already exists
+                const existingStudent = students.find(student => student.name.toLowerCase() === name.toLowerCase());
+
+                if (existingStudent) {
+                    // Display a message saying "Already registered."
+                    alert('Student with the same name is already registered.');
+                } else {
+                    const newStudent = {
+                        name: name,
+                        age: age,
+                        grade: grade,
+                        email: email,
+                        gender: gender,
+                    };
+
+                    addStudent(newStudent);
+
+                    // Reset the form
+                    registrationForm.reset();
+
+                    // Update search results
+                    updateSearchResults(searchBox.value);
+                }
+            });
+
+            // Event listener for the "Back" button
+            const backButton = document.getElementById('back');
+            backButton.addEventListener('click', function () {
+                // Redirect to the previous page or navigate as needed
+                window.location.href = 'index.html';
+            });
+
+            // Function to add search results to the table
+            function addSearchResultToTable(student) {
+                if (student) {
+                    const newRow = document.createElement('tr');
+                    newRow.innerHTML = `
+                        <td>${students.indexOf(student) + 1}</td>
+                        <td>${student.name}</td>
+                        <td>${student.age}</td>
+                        <td>${student.grade}</td>
+                        <td>${student.email}</td>
+                        <td>${student.gender}</td>
+                        <td><button class="edit-button" data-index="${students.indexOf(student)}">Edit</button></td>
+                        <td><button class="delete-button" data-index="${students.indexOf(student)}">Delete</button></td>
+                    `;
+                    studentList.appendChild(newRow);
+                }
+            }
+
+
+
+            // Event listener for the search button
+            searchButton.addEventListener('click', function () {
+                const searchValue = parseInt(searchBox.value, 10);
+                if (!isNaN(searchValue) && searchValue >= 1 && searchValue <= students.length) {
+                    const student = students[searchValue - 1];
+                    searchResults.innerText = `Name: ${student.name}, 
+                    Age: ${student.age}, 
+                    Grade: ${student.grade}, 
+                    Email: ${student.email},
+                    Gender: ${student.gender}`;
+                } else {
+                    searchResults.innerText = 'Invalid registration number or student not found.';
+                }
+            });
+        });
+
+        // Function to update search results
+        function updateSearchResults(registrationNumber) {
+                searchBox.value = registrationNumber; // Update the search box
+                searchButton.click(); // Trigger the search button click
+            }
+
+        
+    
+    </script>
+</body>
+
+</html>
